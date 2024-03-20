@@ -2,11 +2,14 @@ import React from "react";
 import { View, Text, StyleSheet, TextInput, Alert } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import PrimaryButton from "../Components/PrimaryButton";
+import GameScreen from "./GameScreen";
 
-const Startgame = () => {
+const Startgame = (props) => {
   const [number, setNumber] = React.useState("");
+    console.log(props)
 
   function handleSubmit() {
+    
     const inputNumber = parseInt(number);
     if (
       isNaN(inputNumber) ||
@@ -19,6 +22,7 @@ const Startgame = () => {
       return;
     }
     console.log("Next screen");
+    props.onConfirmInput(inputNumber)
   }
   return (
     <View style={styles.gameContainer}>
