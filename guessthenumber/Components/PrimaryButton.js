@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, Pressable } from "react-native";
 const PrimaryButton = ({ children,functionCall }) => {
   function handlePress() {
     console.log("calling this fn",functionCall)
-    functionCall()
+    functionCall(children)
   }
   return (
     <View style={styles.buttonContainerOuter}>

@@ -2,14 +2,13 @@ import React from "react";
 import { View, Text, StyleSheet, TextInput, Alert } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import PrimaryButton from "../Components/PrimaryButton";
-import GameScreen from "./GameScreen";
 
 const Startgame = (props) => {
   const [number, setNumber] = React.useState("");
     console.log(props)
 
   function handleSubmit() {
-    
+
     const inputNumber = parseInt(number);
     if (
       isNaN(inputNumber) ||
@@ -53,17 +52,15 @@ const Startgame = (props) => {
 
 const styles = StyleSheet.create({
   gameContainer: {
-    marginTop: 15,
-    flex: 1,
-    width: "100%",
-    borderWidth: 2,
-    borderColor: "orange",
+    flex:1,
+    borderWidth:2 ,
+    borderColor: "black",
+    justifyContent:"center"
   },
   inputContainer: {
     padding: 20,
     gap: 20,
     borderRadius: 10,
-    margin: 30,
     marginHorizontal: 20,
     elevation: 7,
     alignItems: "center",
