@@ -2,10 +2,9 @@ import React from "react";
 import { View, Text, StyleSheet, TextInput, Alert } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import PrimaryButton from "../Components/PrimaryButton";
-
-const Startgame = (props) => {
+const Startgame = ({setfinalisedNumber}) => {
   const [number, setNumber] = React.useState("");
-    console.log(props)
+    // console.log(props)
 
   function handleSubmit() {
 
@@ -21,7 +20,8 @@ const Startgame = (props) => {
       return;
     }
     console.log("Next screen");
-    props.onConfirmInput(inputNumber)
+    setfinalisedNumber(number)
+    // setScreen()
   }
   return (
     <View style={styles.gameContainer}>
@@ -41,9 +41,7 @@ const Startgame = (props) => {
         />
         <View style={styles.buttonContainer}>
           <PrimaryButton functionCall={handleSubmit}>Submit</PrimaryButton>
-          <PrimaryButton functionCall={() => setNumber("")}>
-            Reset
-          </PrimaryButton>
+          <PrimaryButton functionCall={() => setNumber("")}>Reset</PrimaryButton>
         </View>
       </LinearGradient>
     </View>

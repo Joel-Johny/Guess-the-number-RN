@@ -6,14 +6,24 @@ import GameScreen from "./Screens/GameScreen";
 import React from "react";
 import GameOver from "./Screens/GameOver";
 export default function App() {
-  const [screen, setScreen] = React.useState(
-    <Startgame onConfirmInput={confirmInput} />
-  );
+  const [finalisedNumber, setfinalisedNumber] = React.useState("");
+  const [restartGame, setRestartGame] = React.useState(false);
+  // You cant use the setter function itself inside the initial useState
+  // const [screen, setScreen] = React.useState(
+  //   <Startgame setScreen={setScreen}/>
+  // );
 
-  function confirmInput(inputNumber) {
-    console.log("game Screen loading", inputNumber);
-    setScreen(()=><GameScreen inputNumber={inputNumber} setScreen={setScreen} />);
-  }
+  const [screen, setScreen] = React.useState(
+    <Startgame  setfinalisedNumber={setfinalisedNumber}/>
+  );
+  React.useEffect(()=>{
+    if(finalisedNumber)
+      setScreen(<GameScreen inputNumber={finalisedNumber} setRestartGame={setRestartGame} setScreen={setScreen}/>)
+    if(restartGame)
+      setScreen(<Startgame  setfinalisedNumber={setfinalisedNumber}/>)
+
+  },[finalisedNumber,restartGame])
+
   return (
     <LinearGradient colors={["orange", "pink"]} style={styles.appContainer}>
       <ImageBackground

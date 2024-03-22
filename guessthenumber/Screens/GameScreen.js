@@ -1,20 +1,25 @@
 import React from "react";
-import { StyleSheet, Text, View, Alert } from "react-native";
+import { StyleSheet, Text, View, Alert, Button } from "react-native";
 import GuessContainer from "../Components/GuessContainer";
 import PrimaryButton from "../Components/PrimaryButton";
 import GameOver from "./GameOver";
 let min = 0;
 let max = 100;
 
-const GameScreen = ({ inputNumber,setScreen }) => {
-  // Should be a callback function inside useState if you are calling a function 
-  const [computerGuess, setComputerGuess] = React.useState(()=>generateNumber(0,100));
+const GameScreen = ({ inputNumber,setRestartGame,setScreen }) => {
+  // Should be a callback function inside useState if you are calling a function
+  // const [computerGuess, setComputerGuess] = React.useState(() =>
+  //   generateNumber(min,max)
+  // );
+  const [computerGuess, setComputerGuess] = React.useState(5);
   const [guesses, setGuesses] = React.useState([computerGuess]);
-  
 
   function userTruth(userTold) {
-    if ((computerGuess > inputNumber && userTold == "Higher +") || (computerGuess < inputNumber && userTold == "Lower -")){
-      console.log("Lie")
+    if (
+      (computerGuess > inputNumber && userTold == "Higher +") ||
+      (computerGuess < inputNumber && userTold == "Lower -")
+    ) {
+      console.log("Lie");
       Alert.alert("Liar!!", "Don't lie dude", [
         {
           text: "Sorry lol!",
@@ -22,31 +27,34 @@ const GameScreen = ({ inputNumber,setScreen }) => {
         },
       ]);
       return;
-    } 
+    }
     // Actual Number is higher
-    else if (computerGuess < inputNumber) 
-      min = computerGuess;
-    
+    else if (computerGuess < inputNumber) min = computerGuess;
     // Actual Number is lower
-    else
-      max = computerGuess;
-    console.log("Truth")
-    
-    const currentComputerGuess=generateNumber(min,max)
-    setGuesses((pastGuesses)=>[...pastGuesses,currentComputerGuess])
-    setComputerGuess(currentComputerGuess)
-    // WHat if i send computer guess instead of current computer guess?then you wont have latest state update in GameOver
-    if (computerGuess === inputNumber || guesses.length===3) return( setScreen(<GameOver userGuess={inputNumber} computerGuess={currentComputerGuess} tries={guesses.length+1}/>));
+    else max = computerGuess;
+    console.log("Truth");
 
+    const currentComputerGuess = generateNumber(min, max);
+    setGuesses((pastGuesses) => [...pastGuesses, currentComputerGuess]);
+    setComputerGuess(currentComputerGuess);
+    // WHat if i send computer guess instead of current computer guess?then you wont have latest state update in GameOver
+    if (computerGuess === inputNumber || guesses.length === 3)
+      return setScreen(
+        <GameOver
+          userGuess={inputNumber}
+          computerGuess={currentComputerGuess}
+          tries={guesses.length + 1}
+          setRestartGame={setRestartGame}
+        />
+      );
   }
 
   function generateNumber(min, max) {
-    console.log("Generating number",min,max);
-    const newNumber=Math.floor(Math.random()*(max-min))+min
-    console.log("New",newNumber);
+    console.log("Generating number", min, max);
+    const newNumber = Math.floor(Math.random() * (max - min)) + min;
+    console.log("New", newNumber);
 
-    return newNumber
-    
+    return newNumber;
   }
 
   return (
@@ -56,7 +64,7 @@ const GameScreen = ({ inputNumber,setScreen }) => {
 
       <View style={styles.computer}>
         <Text style={styles.header}>
-          The Computer has {4-guesses.length} tries remaining
+          The Computer has {4 - guesses.length} tries remaining
         </Text>
         <Text style={styles.header}>
           Is the Guessed number Higher or Lower?
@@ -66,10 +74,14 @@ const GameScreen = ({ inputNumber,setScreen }) => {
           <PrimaryButton functionCall={userTruth}>Lower -</PrimaryButton>
         </View>
       </View>
-      {
-        guesses.map((guess,index)=><GuessContainer value={guess} key={index}>Computer Guessed : </GuessContainer>)
-      }
-      
+      {guesses.map((guess, index) => (
+        <GuessContainer value={guess} key={index}>
+          Computer Guessed :{" "}
+        </GuessContainer>
+      ))}
+      <View>
+        <Button title="Restart Game" onPress={() => setRestartGame(true)} />
+      </View>
     </View>
   );
 };
