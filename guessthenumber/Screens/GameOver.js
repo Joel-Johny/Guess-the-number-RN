@@ -2,7 +2,13 @@ import React from "react";
 import { StyleSheet, Text, View, Image, Button } from "react-native";
 import Startgame from "./Startgame";
 
-const GameOver = ({ userGuess, computerGuess, tries, setRestartGame }) => {
+const GameOver = ({
+  userGuess,
+  computerGuess,
+  tries,
+  setRestartGame,
+  setfinalisedNumber,
+}) => {
   console.log(userGuess, computerGuess, tries);
   return (
     <View style={styles.endGame}>
@@ -20,7 +26,13 @@ const GameOver = ({ userGuess, computerGuess, tries, setRestartGame }) => {
         </Text>
       </View>
       <View>
-        <Button title="Restart Game" onPress={() => setRestartGame(true)} />
+        <Button
+          title="Restart Game"
+          onPress={() => {
+            setfinalisedNumber("");
+            setRestartGame(true);
+          }}
+        />
       </View>
     </View>
   );

@@ -1,18 +1,45 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, Text, View, Alert, Button } from "react-native";
 import GuessContainer from "../Components/GuessContainer";
 import PrimaryButton from "../Components/PrimaryButton";
 import GameOver from "./GameOver";
-let min = 0;
-let max = 100;
-
-const GameScreen = ({ inputNumber,setRestartGame,setScreen }) => {
+let min=0;
+let max=10;
+const GameScreen = ({
+  inputNumber,
+  setRestartGame,
+  setScreen,
+  setfinalisedNumber,
+}) => {
   // Should be a callback function inside useState if you are calling a function
   // const [computerGuess, setComputerGuess] = React.useState(() =>
   //   generateNumber(min,max)
-  // );
-  const [computerGuess, setComputerGuess] = React.useState(5);
+  // );.
+
+  //always remember 2 things 1)inside useState u cannot set the setter function of its own 2)if a function having parameter is inside the setter fn make sure its inside a callback else it will call everytime
+  const [computerGuess, setComputerGuess] = React.useState(()=>generateNumber(0, 10));
   const [guesses, setGuesses] = React.useState([computerGuess]);
+  useEffect(() => {
+    console.log("Matching initial guess", computerGuess,inputNumber);
+ 
+    if (computerGuess == inputNumber) {
+    console.log("Matched");
+
+      setScreen(
+        <GameOver
+          userGuess={inputNumber}
+          computerGuess={computerGuess}
+          tries={guesses.length + 1}
+          setRestartGame={setRestartGame}
+          setfinalisedNumber={setfinalisedNumber}
+        />
+      );
+    }
+    return (()=>{
+      min=0;
+      max=100;
+    })
+  }, []);
 
   function userTruth(userTold) {
     if (
@@ -29,22 +56,33 @@ const GameScreen = ({ inputNumber,setRestartGame,setScreen }) => {
       return;
     }
     // Actual Number is higher
-    else if (computerGuess < inputNumber) min = computerGuess;
+    else if (computerGuess < inputNumber) {
+      min = computerGuess+1;
+    console.log("Truth actual no. is higher","between min :",min,"max : ",max);
+
+    }
+
     // Actual Number is lower
-    else max = computerGuess;
-    console.log("Truth");
+    else{
+      max = computerGuess-1;
+      console.log("Truth actual no is lower",min,max);
+    } 
 
     const currentComputerGuess = generateNumber(min, max);
+    console.log("New", currentComputerGuess,"between min :",min,"max : ",max);
+
     setGuesses((pastGuesses) => [...pastGuesses, currentComputerGuess]);
     setComputerGuess(currentComputerGuess);
     // WHat if i send computer guess instead of current computer guess?then you wont have latest state update in GameOver
-    if (computerGuess === inputNumber || guesses.length === 3)
+    if (currentComputerGuess == inputNumber || guesses.length === 3)
+      //3 and not 4 because by the time fueses updates to 4 it will be 3 async update
       return setScreen(
         <GameOver
           userGuess={inputNumber}
           computerGuess={currentComputerGuess}
           tries={guesses.length + 1}
           setRestartGame={setRestartGame}
+          setfinalisedNumber={setfinalisedNumber}
         />
       );
   }
@@ -52,7 +90,6 @@ const GameScreen = ({ inputNumber,setRestartGame,setScreen }) => {
   function generateNumber(min, max) {
     console.log("Generating number", min, max);
     const newNumber = Math.floor(Math.random() * (max - min)) + min;
-    console.log("New", newNumber);
 
     return newNumber;
   }
@@ -60,7 +97,6 @@ const GameScreen = ({ inputNumber,setRestartGame,setScreen }) => {
   return (
     <View style={styles.gameContainer}>
       <GuessContainer value={inputNumber}>Selected Number : </GuessContainer>
-      {/* <Button onPress={()=>setScreen}/> */}
 
       <View style={styles.computer}>
         <Text style={styles.header}>
@@ -80,7 +116,13 @@ const GameScreen = ({ inputNumber,setRestartGame,setScreen }) => {
         </GuessContainer>
       ))}
       <View>
-        <Button title="Restart Game" onPress={() => setRestartGame(true)} />
+        <Button
+          title="Restart Game"
+          onPress={() => {
+            setfinalisedNumber("");
+            setRestartGame(true);
+          }}
+        />
       </View>
     </View>
   );

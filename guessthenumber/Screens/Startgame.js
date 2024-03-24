@@ -12,9 +12,9 @@ const Startgame = ({setfinalisedNumber}) => {
     if (
       isNaN(inputNumber) ||
       inputNumber < 0 ||
-      inputNumber > 100 
+      inputNumber > 10 
     ) {
-      Alert.alert("Invalid Number", "Number has to be between 0-99", [
+      Alert.alert("Invalid Number", "Number has to be between 0-10", [
         { text: "Okay!", style: "destructive", onPress: () => setNumber("") },
       ]);
       return;
@@ -31,7 +31,7 @@ const Startgame = ({setfinalisedNumber}) => {
         end={{ x: 1, y: 1 }}
         colors={["#E01C34", "#B91372"]}
       >
-        <Text style={styles.header}>Enter a Number between 0-99</Text>
+        <Text style={styles.header}>Enter a Number between 0-10</Text>
         <TextInput
           style={styles.textInputBox}
           maxLength={2}

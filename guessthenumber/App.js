@@ -4,7 +4,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import Startgame from "./Screens/Startgame";
 import GameScreen from "./Screens/GameScreen";
 import React from "react";
-import GameOver from "./Screens/GameOver";
 export default function App() {
   const [finalisedNumber, setfinalisedNumber] = React.useState("");
   const [restartGame, setRestartGame] = React.useState(false);
@@ -14,15 +13,27 @@ export default function App() {
   // );
 
   const [screen, setScreen] = React.useState(
-    <Startgame  setfinalisedNumber={setfinalisedNumber}/>
+    <Startgame setfinalisedNumber={setfinalisedNumber} />
   );
-  React.useEffect(()=>{
-    if(finalisedNumber)
-      setScreen(<GameScreen inputNumber={finalisedNumber} setRestartGame={setRestartGame} setScreen={setScreen}/>)
-    if(restartGame)
-      setScreen(<Startgame  setfinalisedNumber={setfinalisedNumber}/>)
-
-  },[finalisedNumber,restartGame])
+  React.useEffect(() => {
+    console.log("Running UE");
+    if (finalisedNumber) {
+      console.log("Rendering game screen",finalisedNumber);
+      setScreen(
+        <GameScreen
+          inputNumber={finalisedNumber}
+          setRestartGame={setRestartGame}//to go back to start screen
+          setfinalisedNumber={setfinalisedNumber}//after we come back to start screen we have to init finalise to "" so that upper if gets skipped and restart if gets exe
+          setScreen={setScreen}//to move forward to gameoverscreen
+        />
+      );
+    }
+    if (restartGame) {
+      console.log("Rendering start game screen");
+      setScreen(<Startgame setfinalisedNumber={setfinalisedNumber} />);
+      setRestartGame(false);
+    }
+  }, [finalisedNumber, restartGame]);
 
   return (
     <LinearGradient colors={["orange", "pink"]} style={styles.appContainer}>
@@ -33,7 +44,7 @@ export default function App() {
         style={styles.image}
       >
         {/* {screen} */}
-        <SafeAreaView style={{flex:1}}>{screen}</SafeAreaView>
+        <SafeAreaView style={{ flex: 1 }}>{screen}</SafeAreaView>
         <StatusBar style="auto" />
       </ImageBackground>
     </LinearGradient>
@@ -42,12 +53,12 @@ export default function App() {
 
 const styles = StyleSheet.create({
   appContainer: {
-    flex:1,
+    flex: 1,
     borderWidth: 3,
     borderColor: "red",
   },
-  image:{
-    height:"100%",
-    width:"100%"
-  }
+  image: {
+    height: "100%",
+    width: "100%",
+  },
 });
