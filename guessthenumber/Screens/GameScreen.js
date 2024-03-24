@@ -36,8 +36,9 @@ const GameScreen = ({
       );
     }
     return (()=>{
+      console.log("min and max should be reset because they are global variable so when the comp unmounts function,states unmount but not the variabkes declared at file level",min,max)
       min=0;
-      max=100;
+      max=10;
     })
   }, []);
 
